@@ -54,7 +54,7 @@ export const VerifyOTPForm = ({
   const [error, setError] = useState("");
 
   return (
-    <div className="w-full flex flex-col items-center justify-center space-y-4 md:space-y-8 px-10">
+    <div className="w-full flex flex-col items-center justify-center space-y-4 md:space-y-8 px-10 text-white">
       <h1 className="text-2xl md:text-3xl font-bold">
         Check your email for a code
       </h1>

@@ -51,10 +51,34 @@ export default function Home() {
           .in("user_id", data?.players ?? [])
           .then(({ data }) => setPlayers(data ?? []));
       });
+
+    const channelA = client
+      .channel("schema-db-changes")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+        },
+        (payload: any) => {
+          console.log(payload);
+          // setResults((prevResults) => {
+          //   const newResults = { ...prevResults };
+          //   newResults[payload.new.user_id] = payload.new.value;
+
+          //   return newResults;
+          // });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      client.removeChannel(channelA);
+    };
   }, []);
 
   return (
-    <div className="items-center justify-items-center flex w-full flex-col space-y-12 p-4">
+    <div className="items-center justify-items-center flex w-full flex-col space-y-12 p-4 text-white">
       <p className="text-xl text-center">
         {`Your Balance: `}
         {
