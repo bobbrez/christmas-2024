@@ -1,0 +1,1 @@
+ALTER TABLE rounds ADD COLUMN players uuid[] NOT NULL DEFAULT '{}';

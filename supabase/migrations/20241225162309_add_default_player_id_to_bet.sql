@@ -1,0 +1,1 @@
+ALTER TABLE bets ALTER COLUMN user_id SET DEFAULT auth.uid();

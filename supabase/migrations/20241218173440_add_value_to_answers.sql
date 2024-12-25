@@ -1,0 +1,1 @@
+ALTER TABLE answers ADD COLUMN value JSONB NOT NULL DEFAULT 'false';
