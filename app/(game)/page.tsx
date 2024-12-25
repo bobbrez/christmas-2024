@@ -7,6 +7,7 @@ import { Tables } from "@/types/database.types";
 import { Input } from "@/components/ui/input";
 import { toast } from "react-toastify";
 import { setBet } from "./actions";
+import Confetti from "react-confetti";
 
 export default function Home() {
   const [balance, setBalance] = useState(0);
@@ -17,6 +18,7 @@ export default function Home() {
   const [round, setRound] = useState<number | null>(null);
   const [roundStatus, setRoundStatus] =
     useState<Tables<"rounds">["status"]>("bets_closed");
+  const [isExploding, setIsExploding] = useState(false);
 
   useEffect(() => {
     const client = createClient();
@@ -79,6 +81,13 @@ export default function Home() {
             setRoundStatus(payload.new.status);
             setRound(payload.new.id);
           }
+
+          if (payload.table === "bets") {
+            if (payload.new.status === "won" && payload.old.status !== "won") {
+              setIsExploding(true);
+              setBalance((prevBalance) => prevBalance + payload.new.amount);
+            }
+          }
           // setResults((prevResults) => {
           //   const newResults = { ...prevResults };
           //   newResults[payload.new.user_id] = payload.new.value;
@@ -93,6 +102,16 @@ export default function Home() {
       client.removeChannel(channelA);
     };
   }, []);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setIsExploding(false);
+    }, 4000);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  });
 
   return (
     <div className="items-center justify-items-center flex w-full flex-col space-y-12 p-4 text-white">
@@ -166,6 +185,7 @@ export default function Home() {
           </button>
         );
       })}
+      {isExploding && <Confetti width={1000} height={1000} />}
     </div>
   );
 }
