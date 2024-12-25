@@ -27,6 +27,17 @@ export default function Home() {
       }
 
       client
+        .from("profiles")
+        .select("*")
+        .eq("user_id", user_id)
+        .single()
+        .then(({ data }) => {
+          if (!data?.first_name) {
+            return (location.href = "/profile");
+          }
+        });
+
+      client
         .from("bets_resolved")
         .select("*")
         .eq("user_id", user_id)
