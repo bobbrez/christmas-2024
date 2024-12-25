@@ -52,6 +52,8 @@ export default function Home() {
           .then(({ data }) => setPlayers(data ?? []));
       });
 
+    console.log("subscribing to changes");
+
     const channelA = client
       .channel("schema-db-changes")
       .on(
@@ -61,7 +63,10 @@ export default function Home() {
           schema: "public",
         },
         (payload: any) => {
-          console.log(payload);
+          if (payload.table === "rounds") {
+            setRoundStatus(payload.new.status);
+            setRound(payload.new.id);
+          }
           // setResults((prevResults) => {
           //   const newResults = { ...prevResults };
           //   newResults[payload.new.user_id] = payload.new.value;
@@ -96,6 +101,7 @@ export default function Home() {
       </p>
       {error && <p className="text-red-500">{error}</p>}
       <Input
+        disabled={roundStatus !== "bets_open"}
         type="number"
         placeholder="How Much?"
         className="text-3xl"
@@ -127,6 +133,7 @@ export default function Home() {
       {players.map((player) => {
         return (
           <button
+            disabled={roundStatus !== "bets_open"}
             key={player.user_id}
             onClick={() => {
               if (round === null) {
@@ -141,7 +148,7 @@ export default function Home() {
               selectedPlayer === player.user_id
                 ? "bg-orange-500 hover:bg-orange-400 focus-visible:outline-orange-500"
                 : "bg-none hover:bg-indigo-400 focus-visible:outline-indigo-500 outline-indigo-500 outline"
-            } px-10 py-6 font-semibold text-white shadow-sm  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 text-5xl`}
+            } px-10 py-6 font-semibold text-white shadow-sm  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 text-5xl disabled:bg-gray-500 disabled:outline-gray-300`}
           >
             {player.first_name}
           </button>
