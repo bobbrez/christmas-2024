@@ -18,7 +18,7 @@
     "clsx": "^2.1.1",
     "framer-motion": "^11.15.0",
     "input-otp": "^1.4.1",
-    "next": "^15.1.2",
+    "next": "^15.2.3",
     "react": "^19.0.0",
     "react-confetti": "^6.1.0",
     "react-confetti-explosion": "^2.1.2",
